@@ -83,6 +83,4 @@ try {
     print "Content-type: text/html\n\n";
     print 'There was an error during the authentication process.<br/>';
     print 'Please try again. If issue persists please contact support@maestrano.com';
-    print '<br/><br/>';
-    print $_;
 };

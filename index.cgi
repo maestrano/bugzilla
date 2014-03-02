@@ -1,4 +1,4 @@
-#!/usr/bin/perl -wT
+#!/usr/bin/perl -w
 # This Source Code Form is subject to the terms of the Mozilla Public
 # License, v. 2.0. If a copy of the MPL was not distributed with this
 # file, You can obtain one at http://mozilla.org/MPL/2.0/.
@@ -21,6 +21,11 @@ use Bugzilla::Constants;
 use Bugzilla::Error;
 use Bugzilla::Update;
 
+# Hook:Maestrano
+# Load Maestrano
+require "./maestrano/app/init/base.pm";
+my $maestrano = MaestranoService->instance();
+
 # Check whether or not the user is logged in
 my $user = Bugzilla->login(LOGIN_OPTIONAL);
 my $cgi = Bugzilla->cgi;
@@ -35,6 +40,23 @@ if ($cgi->param('logout')) {
     $vars->{'message'} = "logged_out";
     # Make sure that templates or other code doesn't get confused about this.
     $cgi->delete('logout');
+}
+
+# Hook:Maestrano
+# Require authentication straight away if intranet
+# mode enabled
+if ($maestrano->is_sso_intranet_enabled()) {
+  if (!$maestrano->get_sso_session()->is_valid()) {
+    print $cgi->redirect($maestrano->get_sso_init_url());
+  }
+}
+
+# Check Maestrano Session is still valid if user is
+# logged in
+if ($user->id && $maestrano->is_sso_enabled()) {
+  if (!$maestrano->get_sso_session()->is_valid()) {
+    Bugzilla->logout();
+  }
 }
 
 ###############################################################################

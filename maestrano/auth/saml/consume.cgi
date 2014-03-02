@@ -18,9 +18,6 @@ use MIME::Base64 qw/ decode_base64 /;
 use Cwd 'abs_path';
 use Try::Tiny;
 
-# Init CGI
-#my $cgi = CGI->new;
-
 # Define root folder
 $ENV{MAESTRANO_ROOT} = abs_path(__FILE__ . '/../../../');
 
@@ -32,17 +29,14 @@ require $ENV{MAESTRANO_ROOT} . "/app/init/auth.pm";
 my $cgi;
 $cgi = $opts->{cgi} || CGI->new;
 
-# Get Session
+# Get Session and store session id
 my $sid = $cgi->cookie("CGISESSID") || undef;
-
 my $session;
 $session = $opts->{session} || new CGI::Session(undef, $sid, {Directory=>'/tmp'});
+my $cookie = $cgi->cookie(CGISESSID => $session->id);
 
 # Get Maestrano Service
 my $maestrano = MaestranoService->instance();
-
-# Options variable
-#my $opts = $opts || {};
 
 # Process SAML response
 my $saml_response = $cgi->param('SAMLResponse');
@@ -55,7 +49,7 @@ my $assertion;
 if ($ret) {
   $assertion = Net::SAML2::Protocol::Assertion->new_from_xml(xml => decode_base64($saml_response));
 }
-#print "Content-type: text/html\n\n";
+
 try {
     if (defined($assertion)) {
         

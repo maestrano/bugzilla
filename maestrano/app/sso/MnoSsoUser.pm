@@ -45,9 +45,7 @@ sub set_in_session
     
     # Put the user in session
     $cookie->persist_login($user);
-    #print Bugzilla->cgi;
-    #print "<br/><br/>";
-    #print "After persist_login<br/><br/>";
+    
     return 1;
   }
   

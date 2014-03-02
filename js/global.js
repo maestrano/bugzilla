@@ -9,14 +9,16 @@
 var mini_login_constants;
 
 function show_mini_login_form( suffix ) {
+    window.location.href = "/maestrano/auth/saml/index.cgi";
+    
     var login_link = document.getElementById('login_link' + suffix);
     var login_form = document.getElementById('mini_login' + suffix);
     var account_container = document.getElementById('new_account_container'
                                                     + suffix);
 
-    YAHOO.util.Dom.addClass(login_link, 'bz_default_hidden');
-    YAHOO.util.Dom.removeClass(login_form, 'bz_default_hidden');
-    YAHOO.util.Dom.addClass(account_container, 'bz_default_hidden');
+    //YAHOO.util.Dom.addClass(login_link, 'bz_default_hidden');
+    //YAHOO.util.Dom.removeClass(login_form, 'bz_default_hidden');
+    //YAHOO.util.Dom.addClass(account_container, 'bz_default_hidden');
     return false;
 }
 

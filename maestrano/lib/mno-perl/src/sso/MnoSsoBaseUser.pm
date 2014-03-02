@@ -206,13 +206,13 @@ sub sign_in
   if ($self->set_in_session()) {
     # ISO8601 Date Formating
     # We need to munge the timezone indicator to add a colon between the hour and minute part
-    my $tz = strftime("%z", localtime(time()));
-    $tz =~ s/(\d{2})(\d{2})/$1:$2/;
-    my $iso8601_recheck = strftime("%Y-%m-%dT%H:%M:%S", $self->{sso_session_recheck}) . $tz;
+    #my $tz = POSIX->strftime("%z", localtime(time()));
+    #$tz =~ s/(\d{2})(\d{2})/$1:$2/;
+    #my $iso8601_recheck = strftime("%Y-%m-%dT%H:%M:%S", $self->{sso_session_recheck}) . $tz;
     
     $self->{session}->param('mno_uid',$self->{uid});
     $self->{session}->param('mno_session', $self->{sso_session});
-    $self->{session}->param('mno_session_recheck',$iso8601_recheck);
+    $self->{session}->param('mno_session_recheck',$self->{sso_session_recheck}->iso8601());
   }
 }
 

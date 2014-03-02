@@ -19,7 +19,7 @@ use Cwd 'abs_path';
 use Try::Tiny;
 
 # Init CGI
-my $cgi = CGI->new;
+#my $cgi = CGI->new;
 
 # Define root folder
 $ENV{MAESTRANO_ROOT} = abs_path(__FILE__ . '/../../../');
@@ -28,9 +28,15 @@ $ENV{MAESTRANO_ROOT} = abs_path(__FILE__ . '/../../../');
 our $opts = {};
 require $ENV{MAESTRANO_ROOT} . "/app/init/auth.pm";
 
+# Get CGI
+my $cgi;
+$cgi = $opts->{cgi} || CGI->new;
+
 # Get Session
 my $sid = $cgi->cookie("CGISESSID") || undef;
-my $session = new CGI::Session(undef, $sid, {Directory=>'/tmp'});
+
+my $session;
+$session = $opts->{session} || new CGI::Session(undef, $sid, {Directory=>'/tmp'});
 
 # Get Maestrano Service
 my $maestrano = MaestranoService->instance();
@@ -49,7 +55,7 @@ my $assertion;
 if ($ret) {
   $assertion = Net::SAML2::Protocol::Assertion->new_from_xml(xml => decode_base64($saml_response));
 }
-print "Content-type: text/html\n\n";
+#print "Content-type: text/html\n\n";
 try {
     if (defined($assertion)) {
         
@@ -69,9 +75,9 @@ try {
         # Refuse access otherwise
         if ($sso_user->{local_id}) {
           $sso_user->sign_in();
-          $cgi->redirect($maestrano->get_after_sso_sign_in_path());
+          print $cgi->redirect($maestrano->get_after_sso_sign_in_path());
         } else {
-          $cgi->redirect($maestrano->get_sso_unauthorized_url());
+          print $cgi->redirect($maestrano->get_sso_unauthorized_url());
         }
     }
     else {

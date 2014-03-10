@@ -33,6 +33,8 @@ $cgi = $opts->{cgi} || CGI->new;
 my $sid = $cgi->cookie("CGISESSID") || undef;
 my $session;
 $session = $opts->{session} || new CGI::Session(undef, $sid, {Directory=>'/tmp'});
+
+# Keep session id as cookie (see redirect below where cookie is actually set)
 my $cookie = $cgi->cookie(CGISESSID => $session->id);
 
 # Get Maestrano Service
@@ -69,7 +71,7 @@ try {
         # Refuse access otherwise
         if ($sso_user->{local_id}) {
           $sso_user->sign_in();
-          print $cgi->redirect($maestrano->get_after_sso_sign_in_path());
+          print $cgi->redirect(-uri =>$maestrano->get_after_sso_sign_in_path(), -cookie=>$cookie);
         } else {
           print $cgi->redirect($maestrano->get_sso_unauthorized_url());
         }

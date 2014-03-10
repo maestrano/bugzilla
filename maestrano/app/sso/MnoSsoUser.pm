@@ -148,8 +148,6 @@ sub get_user_permissions
   while (@result = $sth->fetchrow_array) {
     push(@default_admin_permissions, $result[0]);
   }
-  use Data::Dumper;
-  print Dumper(@default_admin_permissions);
   
   # Initialize permissions 
   my @permissions = @default_user_permissions; # User

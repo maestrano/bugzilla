@@ -2,8 +2,6 @@
 # Require Library folder
 #-----------------------------------------------
 use Cwd 'abs_path';
-use Try::Tiny;
-use Data::Dumper;
 
 my $lib_path;
 my $app_path;

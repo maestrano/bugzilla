@@ -7,10 +7,17 @@ use Data::Dumper;
 
 my $lib_path;
 my $app_path;
+my $perl_libs_path;
 BEGIN {
   $app_path = abs_path(__FILE__ . '/../../../app');
   $lib_path = abs_path(__FILE__ . '/../../../lib');
+  $perl_libs_path = abs_path(__FILE__ . '/../../../lib/perl-libs/lib/perl5');
 }
+
+#-----------------------------------------------
+# Require perl-libs
+#-----------------------------------------------
+use lib $perl_libs_path;
 
 #-----------------------------------------------
 # Require JSON

@@ -71,7 +71,9 @@ try {
         # Refuse access otherwise
         if ($sso_user->{local_id}) {
           $sso_user->sign_in();
-          print $cgi->redirect(-uri =>$maestrano->get_after_sso_sign_in_path(), -cookie=>$cookie);
+          $cgi->send_cookie(-name => 'CGISESSID', -value => $session->id);
+          
+          print $cgi->redirect(-uri =>$maestrano->get_after_sso_sign_in_path());
         } else {
           print $cgi->redirect($maestrano->get_sso_unauthorized_url());
         }

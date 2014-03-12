@@ -14,7 +14,7 @@
 use strict;
 
 # Include the Bugzilla CGI and general utility library.
-use lib qw(. lib);
+use lib qw(. lib maestrano/lib/perl-libs/lib/perl5);
 
 use Bugzilla;
 use Bugzilla::Constants;
